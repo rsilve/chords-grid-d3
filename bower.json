@@ -1,0 +1,26 @@
+{
+  "name": "chords-grid-d3",
+  "version": "0.1.0",
+  "homepage": "https://github.com/rsilve/chords-grid-d3",
+  "authors": [
+    "Robert Silve <robert@silve.net>"
+  ],
+  "description": "d3 renderer for chord grid",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "grid-parser": "https://github.com/rsilve/chords-grid-jison.git",
+    "d3": "~3.4.11"
+  }
+}
