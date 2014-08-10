@@ -1,9 +1,23 @@
 <html>
 <head>
 	<script src="//localhost:35729/livereload.js"></script>
-	<script type="text/javascript" href="d3-grid.js"></script>
+	<script src="d3/d3.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="grid-parser/grid/grid.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="d3-grid.js" charset="utf-8"></script>
+	
+	
 </head>
 <body>
 Simple grids
+<svg id="simple" ></svg>
+	
+	<script type="text/javascript">
+	
+	 var grid = d3.chords.grid.chords("A B |\n B |\n C | D")
+	 //grid.chord.style({"font-size" : "6px"}).style({"color":"red"})
+	 d3.select("#simple").call(grid.render)
+	
+	</script>
+	
 </body>
 </html>
