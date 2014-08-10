@@ -9,15 +9,16 @@
 </head>
 <body>
 Simple grids
-<svg id="simple" ></svg>
+<svg id="simple"></svg>
 	
-	<script type="text/javascript">
 	
-	 var grid = d3.chords.grid.chords("A B |\n B |\n C | D")
-	 //grid.chord.style({"font-size" : "6px"}).style({"color":"red"})
-	 d3.select("#simple").call(grid.render)
-	
-	</script>
+<script type="text/javascript">
+
+ var grid = d3.chords.grid.chords("Am7 Bdim |\n A  C  B _ |\n A _ B C | A B C D")
+ //grid.chord.style({"font-size" : "6px"}).style({"color":"red"})
+ d3.select("#simple").call(grid.render)
+
+</script>
 	
 </body>
 </html>

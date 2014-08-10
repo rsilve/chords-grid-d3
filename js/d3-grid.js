@@ -8,11 +8,10 @@
 	
 	function grid() {
 		var js = GridParser.parse(chords())
-		var i = 0, g = []
-		js.forEach(function(item) {
-			g.push({data : item, row : i++ })
+		var g = []
+		js.forEach(function(item, k) {
+			g.push({data : item, row : k })
 		})
-		console.log("Grid", g)
 		return g
 	}
 	
@@ -24,11 +23,18 @@
 
 	/***********************************************************/
 	
+	
 	var chordRenderer = function(selection) {
-		return selection.append("text").text(function(d) { 
-			console.log("Chord", d)
-			return d.chord
+		return selection.append("text")
+		.attr("transform", function(d) { 
+			return "translate("+d.p+")"
 		})
+		.style("font-family", "Helvetica")
+		.text(function(d) { return d.chord })
+		.attr("stroke-width", "0")
+		.attr("stroke", "black")
+		.style("text-anchor", "middle")
+		.style("baseline-shift", "-0.5em")
 	}
 	
 	function chord(selection) {
@@ -49,14 +55,101 @@
 	
 	/***********************************************************/
 	
+	
+	var separatorRenderer = function(selection) {
+		return selection.append("path")
+		.attr("d", d3.svg.line())
+		.attr("fill", "none")
+		.attr("stroke-width",  "1")
+		.attr("stroke", "black")
+	}
+	
+	function separator(selection) {
+		return separatorRenderer(selection)
+	}
+	
+	grid.separator = separator;
+	
+	
+	
+	/***********************************************************/
+	
 	var measureRenderer = function(selection) {
-		var translate = function(d) {
-			return "translate("+[d.cell*size, 0] +")"
+		var translate = function(d) { return "translate("+[d.cell*size, 0] +")" }
+		
+		var g = selection.append("g").attr("transform", translate)
+		
+		g.append("line").attr({"x1" :0, "y1": 0, "x2": 0, "y2": size})
+		g.append("line").attr({"x1" : size, "y1": 0,  "x2": size, "y2": size})
+		
+		
+		var separators = function(d) { 
+			var paths = []
+			if (d.type === 1) {
+				
+			}
+			if (d.type === 2) {
+				paths.push([[size/2,0],[size/2, size/2],[0, size/2]])
+			}
+			if (d.type === 3) {
+				paths.push([[0, size],[size, 0]])
+			}
+			if (d.type === 4) {
+				paths.push([[size/2,size],[size/2, size/2],[size, size/2]])
+			}
+			if (d.type === 5) {
+				paths.push([[size/2,0],[size/2, size/2],[0, size/2]])
+				paths.push([[size/2,size/2],[size, size/2]])
+			}
+			if (d.type === 6) {
+				paths.push([[0, size/2],[size, size/2]])
+				paths.push([[size/2, size/2],[size/2, size]])
+			}
+			if (d.type === 7) {
+				paths.push([[0, size/2],[size, size/2]])
+				paths.push([[size/2, 0],[size/2, size]])
+			}
+			return paths 
 		}
-		return selection.append("g").attr("transform", translate).selectAll("g").data(function(d) { 
-			console.log("Measure", d)
-			return d.chords
-		}).enter().call(chord)
+		
+		g.selectAll("path").data(separators).enter().call(separator)
+		
+		var data = function(d) { 
+			if (d.type === 1) {
+				d.chords[0].p = [size/2, size/2] 
+			}
+			if (d.type === 2) {
+				d.chords[0].p = [size/4, size/4] 
+				d.chords[1].p = [size*2/3, size*3/4] 
+			}
+			if (d.type === 3) {
+				d.chords[0].p = [size/3, size/4] 
+				d.chords[1].p = [size*2/3, size*3/4] 
+			}
+			if (d.type === 4) {
+				d.chords[0].p = [size/3, size/4] 
+				d.chords[1].p = [size*3/4, size*3/4] 
+			}
+			if (d.type === 5) {
+				d.chords[0].p = [size/4, size/4] 
+				d.chords[1].p = [size*3/4, size/4] 
+				d.chords[2].p = [size/2, size*3/4] 
+			}
+			if (d.type === 6) {
+				d.chords[0].p = [size/2, size/4] 
+				d.chords[1].p = [size/4, size*3/4] 
+				d.chords[2].p = [size*3/4, size*3/4] 
+			}
+			if (d.type === 7) {
+				d.chords[0].p = [size/4, size/4] 
+				d.chords[1].p = [size*3/4, size/4] 
+				d.chords[2].p = [size/4, size*3/4] 
+				d.chords[3].p = [size*3/4, size*3/4] 
+			}
+			return d.chords 
+		}
+		
+		return g.selectAll("g").data(data).enter().call(chord)
 	}
 	
 	function measure(selection) {
@@ -79,19 +172,26 @@
 	/***********************************************************/
 
 	var rowRenderer = function(selection) {
-		//console.log(selection)
-		//return selection.append("text").text("OK")
 		var translate = function(d) {
-			return "translate("+[0, d.row*size+12] +")"
+			return "translate("+[0, d.row * size] +")"
 		}
-		return selection.append("g").attr("transform", translate).selectAll("g").data(function(d) { 
-			console.log("Row", d)
-			var i = 0
-			d.data.forEach(function(item) {
-				item.cell = i++
-			})
+		var measures = function(d) { 
+			d.data.forEach(function(item, k) { item.cell = k })
 			return d.data
-		}).enter().call(measure)
+		}
+		
+		var g = selection.append("g").attr("transform", translate)
+		.attr("stroke-width", "1")
+		.attr("stroke", "black")
+		
+		
+		g.append("line").attr({"x1" :0, "y1": 0, "y2": 0})
+		.attr("x2", function(d) { return d.data.length * size; })
+		
+		g.append("line").attr({"x1" :0, "y1": size, "y2": size})
+		.attr("x2", function(d) { return d.data.length * size; })
+		
+		return g.selectAll("g").data(measures).enter().call(measure)
 	}
 	
 	function row(selection) {
@@ -112,13 +212,13 @@
 	
 	/***********************************************************/
 	
-	function render(selection) {
-		
+	function render(selection) {	
 		var data = grid()
 		
-		
 		return selection
-		.attr("height", data.length * size)
+		.attr("height", data.length * size+4)
+		.append("g")
+		.attr("transform", "translate(2,2)")
 		.selectAll("g").data(data).enter().call(row)
 	}
 	
