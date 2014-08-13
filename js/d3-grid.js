@@ -1,4 +1,21 @@
-(function() {
+(function (factory) {
+
+    // Enable multiple loading tool
+
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(["d3", "GridParser"], factory);
+    } else if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+        // Node js
+        var d3 = require("d3")
+        var GridParser = require('grid-parser/grid/grid-commonjs')
+        module.exports = factory(d3, GridParser)
+    } else {
+        // Browser globals
+		
+		(d3.chords || (d3.chords = {})).grid = factory(d3, GridParser);
+    }
+})(function(d3, GridParser) {
 	
 	var size = 92,
 	    chords = d3.functor(""),
@@ -225,9 +242,6 @@
 	grid.render = render
 	
 	
-
-	// export commonjs module or add to d3 layout
-	if (typeof module === "object" && module.exports) module.exports = grid;
-	else (d3.chords || (d3.chords = {})).grid = grid;
+	return grid  
 	  
-})()
+});
