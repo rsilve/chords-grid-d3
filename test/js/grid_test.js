@@ -1,6 +1,5 @@
 'use strict';
 
-var jsdom = require('jsdom')
 var d3 = require('d3');
 var GridParser = require('grid-parser/grid/grid-commonjs');
 var grid = require('../../js/d3-grid');
