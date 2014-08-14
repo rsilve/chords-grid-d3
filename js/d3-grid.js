@@ -54,6 +54,7 @@
 		.attr("stroke", "black")
 		.style("text-anchor", "middle")
 		.style("baseline-shift", "-0.5em")
+		.attr("class", "grid-chord")
 	}
 	
 	function chord(selection) {
@@ -96,7 +97,7 @@
 	var measureRenderer = function(selection) {
 		var translate = function(d) { return "translate("+[d.cell*size, 0] +")" }
 		
-		var g = selection.append("g").attr("transform", translate)
+		var g = selection.append("g").attr("transform", translate).attr("class", "grid-measure")
 		
 		g.append("line").attr({"x1" :0, "y1": 0, "x2": 0, "y2": size})
 		g.append("line").attr({"x1" : size, "y1": 0,  "x2": size, "y2": size})
@@ -202,7 +203,7 @@
 		var g = selection.append("g").attr("transform", translate)
 		.attr("stroke-width", "1")
 		.attr("stroke", "black")
-		.attr("class", "row")
+		.attr("class", "grid-row")
 		
 		
 		g.append("line").attr({"x1" :0, "y1": 0, "y2": 0})
