@@ -24,7 +24,9 @@
 	
 	
 	function grid() {
-		var js = GridParser.parse(chords())
+		var str = chords()
+		if (! str) return [];
+		var js = GridParser.parse(str)
 		var g = []
 		js.forEach(function(item, k) {
 			g.push({data : item, row : k })
@@ -33,7 +35,7 @@
 	}
 	
 	grid.chords = function(x) {
-		if (!arguments.length) return chords;
+		if (!arguments.length) return grid;
 		chords = d3.functor(x);
 		return grid;
     };
@@ -200,6 +202,7 @@
 		var g = selection.append("g").attr("transform", translate)
 		.attr("stroke-width", "1")
 		.attr("stroke", "black")
+		.attr("class", "row")
 		
 		
 		g.append("line").attr({"x1" :0, "y1": 0, "y2": 0})

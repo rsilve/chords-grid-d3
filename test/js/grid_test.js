@@ -1,7 +1,5 @@
 'use strict';
 
-var d3 = require('d3');
-var GridParser = require('grid-parser/grid/grid-commonjs');
 var grid = require('../../js/d3-grid');
 
 /*
@@ -28,6 +26,15 @@ exports.grid = {
   setUp: function(done) {
     // setup here if necessary
     done();
+  },
+  
+  nothing : function (test) {
+        test.expect(2);
+        var rows = grid.chords()();
+        
+		test.ok(rows);
+		test.equal(rows.length, 0);     // 1 ligne
+		test.done();
   },
   oneMeasureOneChord : function (test) {
         test.expect(7);
